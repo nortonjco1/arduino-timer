@@ -1,0 +1,32 @@
+step "deploy-a-windows-service" {
+    name = "Deploy a Windows Service"
+    properties = {
+        Octopus.Action.TargetRoles = "test"
+    }
+
+    action {
+        action_type = "Octopus.WindowsService"
+        properties = {
+            Octopus.Action.EnabledFeatures = ",Octopus.Features.WindowsService,Octopus.Features.ConfigurationTransforms,Octopus.Features.ConfigurationVariables"
+            Octopus.Action.Package.AutomaticallyRunConfigurationTransformationFiles = "True"
+            Octopus.Action.Package.AutomaticallyUpdateAppSettingsAndConnectionStrings = "True"
+            Octopus.Action.Package.DownloadOnTentacle = "False"
+            Octopus.Action.Package.FeedId = "octopus-server-built-in"
+            Octopus.Action.Package.PackageId = "HttpToolkit-linux-x64-1"
+            Octopus.Action.WindowsService.CreateOrUpdateService = "True"
+            Octopus.Action.WindowsService.DesiredStatus = "Default"
+            Octopus.Action.WindowsService.ServiceAccount = "LocalSystem"
+            Octopus.Action.WindowsService.StartMode = "auto"
+        }
+        worker_pool_variable = ""
+
+        packages {
+            acquisition_location = "Server"
+            feed = "octopus-server-built-in"
+            package_id = "HttpToolkit-linux-x64-1"
+            properties = {
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
